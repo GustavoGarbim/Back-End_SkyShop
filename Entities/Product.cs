@@ -8,5 +8,7 @@
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public int Stock { get; set; }
+
+        public virtual ICollection<CartItem> CartItems { get; set; }
     }
 }

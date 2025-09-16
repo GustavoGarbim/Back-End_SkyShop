@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkyShop1.Data;
 using SkyShop1.Entities;
+using SkyShop1.DTO;
 
 namespace SkyShop1.Controllers
 {
@@ -21,12 +22,43 @@ namespace SkyShop1.Controllers
             _context = context;
         }
 
-        // GET: api/Carts
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cart>>> GetCarts()
+        // POST /api/cart/items
+        [HttpPost]
+        public async Task<IActionResult> AddItemToCart([FromBody] AddOrUpdateCartItemDTO itemDTO)
         {
-            return await _context.Carts.ToListAsync();
+            var product = await _context.Products.FindAsync(itemDTO.ProductId);
+            if (product == null) {
+                return NotFound("Produto não encontrado.");
+            }
+            var userId = 1;
+
+            var cart = await _context.Carts.Include(c => c.Items).FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (cart == null) {
+                cart = new Cart { UserId = userId };
+                _context.Carts.Add(cart);
+            }
+
+            var existingItem = cart.Items.FirstOrDefault(i => i.ProductId == itemDTO.ProductId);
+            if (existingItem == null) {
+                existingItem.Quantity += itemDTO.Quantity;
+            }
+            else
+            {
+                var newItem = new CartItem
+                {
+                    ProductId = itemDTO.ProductId,
+                    Quantity = itemDTO.Quantity
+                };
+                cart.Items.Add(newItem);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(cart); 
         }
+
+
 
         // GET: api/Carts/5
         [HttpGet("{id}")]
