@@ -23,7 +23,7 @@ namespace SkyShop1.Controllers
         }
 
         // POST /api/cart/items
-        [HttpPost]
+        [HttpPost("items")]
         public async Task<IActionResult> AddItemToCart([FromBody] AddOrUpdateCartItemDTO itemDTO)
         {
             var product = await _context.Products.FindAsync(itemDTO.ProductId);
@@ -40,7 +40,7 @@ namespace SkyShop1.Controllers
             }
 
             var existingItem = cart.Items.FirstOrDefault(i => i.ProductId == itemDTO.ProductId);
-            if (existingItem == null) {
+            if (existingItem != null) {
                 existingItem.Quantity += itemDTO.Quantity;
             }
             else
@@ -103,17 +103,6 @@ namespace SkyShop1.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/Carts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Cart>> PostCart(Cart cart)
-        {
-            _context.Carts.Add(cart);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCart", new { id = cart.Id }, cart);
         }
 
         // DELETE: api/Carts/5

@@ -1,52 +1,6 @@
 [
   {
     "ContainingType": "SkyShop1.Controllers.CartsController",
-    "Method": "GetCarts",
-    "RelativePath": "api/Carts",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[SkyShop1.Entities.Cart, SkyShop1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "SkyShop1.Controllers.CartsController",
-    "Method": "PostCart",
-    "RelativePath": "api/Carts",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "cart",
-        "Type": "SkyShop1.Entities.Cart",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "SkyShop1.Entities.Cart",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "SkyShop1.Controllers.CartsController",
     "Method": "GetCart",
     "RelativePath": "api/Carts/{id}",
     "HttpMethod": "GET",
@@ -103,6 +57,22 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SkyShop1.Controllers.CartsController",
+    "Method": "AddItemToCart",
+    "RelativePath": "api/Carts/items",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemDTO",
+        "Type": "SkyShop1.DTO.AddOrUpdateCartItemDTO",
         "IsRequired": true
       }
     ],
