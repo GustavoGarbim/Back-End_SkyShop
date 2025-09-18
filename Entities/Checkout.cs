@@ -8,14 +8,17 @@ namespace SkyShop1.Entities
         [Key]
         public int Id { get; set; } // PK
 
+        [Required]
         public int CartId { get; set; }
 
         [ForeignKey("CartId")]
-        public virtual Cart? Cart { get; set; }
+        public virtual Cart Cart { get; set; }
+
+        [Required]
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public virtual User? User { get; set; }
+        public virtual User User { get; set; }
 
         [Required]
         public int TotalItems { get; set; }

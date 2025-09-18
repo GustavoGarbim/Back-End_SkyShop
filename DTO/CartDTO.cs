@@ -15,8 +15,8 @@ namespace SkyShop1.DTO
     public class CartItemDTO
     {
         public int ProductId { get; set; }
-        public string ProductName { get; set; } = null!;
-        public decimal Price { get; set; }
+        public string ProductName { get; set; }
+        public float Price { get; set; }
         public int Quantity { get; set; }
     }
 
@@ -24,6 +24,6 @@ namespace SkyShop1.DTO
     {
         public int Id { get; set; }
         public List<CartItemDTO> Items { get; set; } = new();
-        public decimal TotalValue { get; set; }
+        public float TotalValue { get; set; }
     }
 }

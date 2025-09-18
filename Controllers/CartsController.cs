@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkyShop1.Data;
 using SkyShop1.Entities;
@@ -24,13 +19,17 @@ namespace SkyShop1.Controllers
 
         // POST /api/cart/items
         [HttpPost("items")]
-        public async Task<IActionResult> AddItemToCart([FromBody] AddOrUpdateCartItemDTO itemDTO)
+        public async Task<ActionResult<CartDTO>> AddItemToCart([FromBody] AddOrUpdateCartItemDTO itemDTO, [FromQuery] int userId)
         {
+            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
+            if (!userExists) {
+                return NotFound("Usuário não encontrado.");
+            }
+
             var product = await _context.Products.FindAsync(itemDTO.ProductId);
             if (product == null) {
                 return NotFound("Produto não encontrado.");
             }
-            var userId = 1;
 
             var cart = await _context.Carts.Include(c => c.Items).FirstOrDefaultAsync(c => c.UserId == userId);
 
@@ -55,75 +54,122 @@ namespace SkyShop1.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(cart); 
+            return await GetCartByUserId(userId);
         }
 
 
-
-        // GET: api/Carts/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Cart>> GetCart(int id)
+        // GET: api/Carts?5
+        [HttpGet]
+        public async Task<ActionResult<CartDTO>> GetCart([FromQuery] int userId)
         {
-            var cart = await _context.Carts.FindAsync(id);
+            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
+            if (!userExists)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
+
+            var cart = await _context.Carts
+                .Include(c => c.Items)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
             if (cart == null)
             {
-                return NotFound();
+                return Ok(new Cart());
             }
 
-            return cart;
+            var cartDTO = new CartDTO
+            {
+                Id = cart.Id,
+                Items = cart.Items.Select(i => new CartItemDTO
+                {
+                    ProductId = i.ProductId,
+                    ProductName = i.Product?.Name ?? "Produto removido",
+                    Price = i.Product?.Price ?? 0,
+                    Quantity = i.Quantity
+                }).ToList(),
+            };
+
+            cartDTO.TotalValue = cartDTO.Items.Sum(i => i.Price * i.Quantity);
+
+            return Ok(cartDTO);
         }
 
-        // PUT: api/Carts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCart(int id, Cart cart)
+        private async Task<ActionResult<CartDTO>> GetCartByUserId(int userId)
         {
-            if (id != cart.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(cart).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CartExists(id))
+            var cart = await _context.Carts
+                .Include(c => c.Items)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+            if (cart == null)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Ok(new CartDTO());
             }
 
-            return NoContent();
+            var cartDto = new CartDTO
+            {
+                Id = cart.Id,
+                Items = cart.Items.Select(item => new CartItemDTO
+                {
+                    ProductId = item.ProductId,
+                    ProductName = item.Product?.Name ?? "Produto Indisponível",
+                    Price = item.Product.Price,
+                    Quantity = item.Quantity
+                }).ToList()
+            };
+            cartDto.TotalValue = cartDto.Items.Sum(item => item.Price * item.Quantity);
+
+            return Ok(cartDto);
         }
 
-        // DELETE: api/Carts/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCart(int id)
+        // PUT: api/carts/items/{productId}?userId=1
+        [HttpPut("items/{productId}")]
+        public async Task<ActionResult<CartDTO>> UpdateItemQuantity(int productId, [FromBody] AddOrUpdateCartItemDTO quantityDto, [FromQuery] int userId)
         {
-            var cart = await _context.Carts.FindAsync(id);
+            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
+
+            if (!userExists)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
+
+            var cart = await _context.Carts
+                .Include(c => c.Items)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
             if (cart == null)
             {
-                return NotFound();
+                return NotFound("Carrinho não encontrado.");
             }
 
-            _context.Carts.Remove(cart);
+            var itemToUpdate = cart.Items.FirstOrDefault(i => i.ProductId == productId);
+
+            if (itemToUpdate == null)
+            {
+                return NotFound("Item não encontrado no carrinho.");
+            }
+
+            itemToUpdate.Quantity = quantityDto.Quantity;
+            await _context.SaveChangesAsync();
+            return await GetCartByUserId(userId);
+        }
+
+        // DELETE: /api/carts/items/{productId}?userId=1
+        [HttpDelete("items/{productId}")]
+        public async Task<ActionResult<CartDTO>> RemoveItemFromCart(int productId, [FromQuery] int userId)
+        {
+            var cart = await _context.Carts
+                .Include(c => c.Items)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+            if (cart == null) return NotFound("Carrinho não encontrado.");
+
+            var itemToRemove = cart.Items.FirstOrDefault(i => i.ProductId == productId);
+            if (itemToRemove == null) return NotFound("Item não encontrado no carrinho.");
+
+            _context.CartItems.Remove(itemToRemove);
             await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
-
-        private bool CartExists(int id)
-        {
-            return _context.Carts.Any(e => e.Id == id);
+            return await GetCartByUserId(userId);
         }
     }
 }

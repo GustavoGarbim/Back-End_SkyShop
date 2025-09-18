@@ -12,8 +12,8 @@ using SkyShop1.Data;
 namespace SkyShop1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250917133055_inicial2")]
-    partial class inicial2
+    [Migration("20250918171531_inicial3")]
+    partial class inicial3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,28 @@ namespace SkyShop1.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("SkyShop1.DTO.CheckoutLogDTO", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CheckoutId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LogTimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CheckoutLogDTO");
+                });
 
             modelBuilder.Entity("SkyShop1.Entities.Cart", b =>
                 {
@@ -40,6 +62,8 @@ namespace SkyShop1.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Carts");
                 });
@@ -84,10 +108,10 @@ namespace SkyShop1.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsPayed")
+                    b.Property<bool>("IsPayed")
                         .HasColumnType("bit");
 
                     b.Property<int>("TotalItems")
@@ -101,7 +125,38 @@ namespace SkyShop1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("Checkouts");
+                });
+
+            modelBuilder.Entity("SkyShop1.Entities.CheckoutLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CheckoutId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LogTimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CheckoutId");
+
+                    b.ToTable("CheckoutLogs");
                 });
 
             modelBuilder.Entity("SkyShop1.Entities.Product", b =>
@@ -166,6 +221,17 @@ namespace SkyShop1.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("SkyShop1.Entities.Cart", b =>
+                {
+                    b.HasOne("SkyShop1.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SkyShop1.Entities.CartItem", b =>
                 {
                     b.HasOne("SkyShop1.Entities.Cart", "Cart")
@@ -183,6 +249,36 @@ namespace SkyShop1.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SkyShop1.Entities.Checkout", b =>
+                {
+                    b.HasOne("SkyShop1.Entities.Cart", "Cart")
+                        .WithMany()
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SkyShop1.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SkyShop1.Entities.CheckoutLog", b =>
+                {
+                    b.HasOne("SkyShop1.Entities.Checkout", "Checkout")
+                        .WithMany()
+                        .HasForeignKey("CheckoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Checkout");
                 });
 
             modelBuilder.Entity("SkyShop1.Entities.Cart", b =>

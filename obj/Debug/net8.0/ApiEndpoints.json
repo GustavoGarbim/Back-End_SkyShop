@@ -2,20 +2,20 @@
   {
     "ContainingType": "SkyShop1.Controllers.CartsController",
     "Method": "GetCart",
-    "RelativePath": "api/Carts/{id}",
+    "RelativePath": "api/Carts",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "userId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SkyShop1.Entities.Cart",
+        "Type": "SkyShop1.DTO.CartDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -24,43 +24,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "SkyShop1.Controllers.CartsController",
-    "Method": "PutCart",
-    "RelativePath": "api/Carts/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "cart",
-        "Type": "SkyShop1.Entities.Cart",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SkyShop1.Controllers.CartsController",
-    "Method": "DeleteCart",
-    "RelativePath": "api/Carts/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "SkyShop1.Controllers.CartsController",
@@ -74,21 +37,16 @@
         "Name": "itemDTO",
         "Type": "SkyShop1.DTO.AddOrUpdateCartItemDTO",
         "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SkyShop1.Controllers.CheckoutsController",
-    "Method": "GetCheckouts",
-    "RelativePath": "api/Checkouts",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[SkyShop1.Entities.Checkout, SkyShop1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "SkyShop1.DTO.CartDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -99,22 +57,115 @@
     ]
   },
   {
-    "ContainingType": "SkyShop1.Controllers.CheckoutsController",
-    "Method": "PostCheckout",
-    "RelativePath": "api/Checkouts",
+    "ContainingType": "SkyShop1.Controllers.CartsController",
+    "Method": "UpdateItemQuantity",
+    "RelativePath": "api/Carts/items/{productId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "quantityDto",
+        "Type": "SkyShop1.DTO.AddOrUpdateCartItemDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SkyShop1.DTO.CartDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SkyShop1.Controllers.CartsController",
+    "Method": "RemoveItemFromCart",
+    "RelativePath": "api/Carts/items/{productId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SkyShop1.DTO.CartDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SkyShop1.Controllers.CheckoutLogsController",
+    "Method": "GetLogsForCheckout",
+    "RelativePath": "api/CheckoutLogs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "checkoutId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SkyShop1.DTO.CheckoutLogDTO, SkyShop1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SkyShop1.Controllers.CheckoutLogsController",
+    "Method": "PostCheckoutLog",
+    "RelativePath": "api/CheckoutLogs",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "checkout",
-        "Type": "SkyShop1.Entities.Checkout",
+        "Name": "checkoutLog",
+        "Type": "SkyShop1.Entities.CheckoutLog",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SkyShop1.Entities.Checkout",
+        "Type": "SkyShop1.Entities.CheckoutLog",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -125,9 +176,9 @@
     ]
   },
   {
-    "ContainingType": "SkyShop1.Controllers.CheckoutsController",
-    "Method": "GetCheckout",
-    "RelativePath": "api/Checkouts/{id}",
+    "ContainingType": "SkyShop1.Controllers.CheckoutLogsController",
+    "Method": "GetCheckoutLog",
+    "RelativePath": "api/CheckoutLogs/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -140,7 +191,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "SkyShop1.Entities.Checkout",
+        "Type": "SkyShop1.Entities.CheckoutLog",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -151,9 +202,9 @@
     ]
   },
   {
-    "ContainingType": "SkyShop1.Controllers.CheckoutsController",
-    "Method": "PutCheckout",
-    "RelativePath": "api/Checkouts/{id}",
+    "ContainingType": "SkyShop1.Controllers.CheckoutLogsController",
+    "Method": "PutCheckoutLog",
+    "RelativePath": "api/CheckoutLogs/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -164,17 +215,17 @@
         "IsRequired": true
       },
       {
-        "Name": "checkout",
-        "Type": "SkyShop1.Entities.Checkout",
+        "Name": "checkoutLog",
+        "Type": "SkyShop1.Entities.CheckoutLog",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SkyShop1.Controllers.CheckoutsController",
-    "Method": "DeleteCheckout",
-    "RelativePath": "api/Checkouts/{id}",
+    "ContainingType": "SkyShop1.Controllers.CheckoutLogsController",
+    "Method": "DeleteCheckoutLog",
+    "RelativePath": "api/CheckoutLogs/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -183,6 +234,27 @@
         "Name": "id",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SkyShop1.Controllers.CheckoutsController",
+    "Method": "ProcessCheckout",
+    "RelativePath": "api/Checkouts",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "checkoutDTO",
+        "Type": "SkyShop1.DTO.CreateCheckoutDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

@@ -15,7 +15,7 @@ namespace SkyShop1.Entities
         public int CartItemId { get; set; } // FK
 
         [ForeignKey("UserId")]
-        public virtual User? User { get; set; }
+        public virtual User User { get; set; }
 
         public virtual ICollection<CartItem> Items { get; set; }
 

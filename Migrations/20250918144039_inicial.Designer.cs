@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkyShop1.Data;
 
@@ -11,9 +12,11 @@ using SkyShop1.Data;
 namespace SkyShop1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250918144039_inicial")]
+    partial class inicial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,28 +24,6 @@ namespace SkyShop1.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("SkyShop1.DTO.CheckoutLogDTO", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CheckoutId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LogTimeStamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CheckoutLogDTO");
-                });
 
             modelBuilder.Entity("SkyShop1.Entities.Cart", b =>
                 {
@@ -127,36 +108,6 @@ namespace SkyShop1.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Checkouts");
-                });
-
-            modelBuilder.Entity("SkyShop1.Entities.CheckoutLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CheckoutId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LogTimeStamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CheckoutId");
-
-                    b.ToTable("CheckoutLogs");
                 });
 
             modelBuilder.Entity("SkyShop1.Entities.Product", b =>
@@ -268,17 +219,6 @@ namespace SkyShop1.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SkyShop1.Entities.CheckoutLog", b =>
-                {
-                    b.HasOne("SkyShop1.Entities.Checkout", "Checkout")
-                        .WithMany()
-                        .HasForeignKey("CheckoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Checkout");
                 });
 
             modelBuilder.Entity("SkyShop1.Entities.Cart", b =>

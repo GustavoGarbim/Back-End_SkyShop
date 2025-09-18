@@ -16,7 +16,7 @@ namespace SkyShop1.Entities
         [Required]
         public string Description { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
         public int Stock { get; set; }
