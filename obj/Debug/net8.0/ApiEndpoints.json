@@ -1,5 +1,31 @@
 [
   {
+    "ContainingType": "SkyShop1.Controllers.AuthController",
+    "Method": "MakeLogin",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "makeAuthDTO",
+        "Type": "SkyShop1.DTO.MakeAuthDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SkyShop1.DTO.MakeAuthDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "SkyShop1.Controllers.CartsController",
     "Method": "GetCart",
     "RelativePath": "api/Carts",
