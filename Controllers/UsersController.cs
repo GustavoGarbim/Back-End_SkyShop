@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkyShop1.Data;
+using SkyShop1.DTO;
 using SkyShop1.Entities;
 
 namespace SkyShop1.Controllers
@@ -22,6 +19,7 @@ namespace SkyShop1.Controllers
         }
 
         // GET: api/Users
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
@@ -29,6 +27,7 @@ namespace SkyShop1.Controllers
         }
 
         // GET: api/Users/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -43,6 +42,7 @@ namespace SkyShop1.Controllers
         }
 
         // PUT: api/Users/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
@@ -74,15 +74,27 @@ namespace SkyShop1.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<CreateUserDTO>> PostUser(CreateUserDTO userDTO)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            var user = await _context.Users.AnyAsync(m => m.Email == userDTO.Email);
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            if (user) { return Conflict("Este e-mail já está em uso."); }
+
+            var newUser = new User
+            {
+                Name = userDTO.Name,
+                Email = userDTO.Email,
+                Password = userDTO.Password,
+                CreatedAt = DateTime.UtcNow,
+                Address = userDTO.Address
+            };
+
+            _context.Users.Add(newUser);
+            return CreatedAtAction("GetUser", new { id = newUser.Id }, newUser);
         }
 
         // DELETE: api/Users/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

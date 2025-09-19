@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SkyShop1")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b3b676d169cf0ac2d4c6ff9246bc1440384ec7c0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+429bcd4cafb08cdeba9213f166d401c1995c45fb")]
 [assembly: System.Reflection.AssemblyProductAttribute("SkyShop1")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SkyShop1")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

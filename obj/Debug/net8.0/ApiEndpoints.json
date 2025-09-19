@@ -423,14 +423,14 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "user",
-        "Type": "SkyShop1.Entities.User",
+        "Name": "userDTO",
+        "Type": "SkyShop1.DTO.CreateUserDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "SkyShop1.Entities.User",
+        "Type": "SkyShop1.DTO.CreateUserDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",

@@ -4,8 +4,11 @@ using SkyShop1.Data;
 using SkyShop1.DTO;
 using SkyShop1.Entities;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace SkyShop1.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CheckoutsController : ControllerBase
