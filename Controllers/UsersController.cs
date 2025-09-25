@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
 using SkyShop1.Data;
 using SkyShop1.DTO;
 using SkyShop1.Entities;
+using System.Security.Claims;
 
 namespace SkyShop1.Controllers
 {
@@ -44,14 +46,18 @@ namespace SkyShop1.Controllers
         // PUT: api/Users/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<ActionResult<UpdateUserDTO>> PutUser(int id, [FromBody] UpdateUserDTO userDto)
         {
-            if (id != user.Id)
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
             {
-                return BadRequest();
+                return NotFound("Usuario não encontrado.");
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            user.Name = userDto.Name;
+            user.Email = userDto.Email;
+            user.Address = userDto.Address;
 
             try
             {
@@ -67,6 +73,45 @@ namespace SkyShop1.Controllers
                 {
                     throw;
                 }
+            }
+
+            return NoContent();
+        }
+
+        //PUT: api/User/password/5
+        [Authorize]
+        [HttpPut("password/{id}")]
+        public async Task<IActionResult> ChangePassword(int id, [FromBody] ChangePasswordDTO passwordDto)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
+
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (user.Id.ToString() != userIdFromToken)
+            {
+                return Forbid();
+            }
+
+            if (passwordDto.OldPassword != user.Password)
+            {
+                return BadRequest("A senha antiga está incorreta.");
+            }
+
+            var newPassword = passwordDto.NewPassword;
+
+            user.Password = newPassword;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, "Ocorreu um erro ao salvar a nova senha.");
             }
 
             return NoContent();
@@ -90,6 +135,8 @@ namespace SkyShop1.Controllers
             };
 
             _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
             return CreatedAtAction("GetUser", new { id = newUser.Id }, newUser);
         }
 

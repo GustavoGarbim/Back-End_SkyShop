@@ -480,12 +480,22 @@
         "IsRequired": true
       },
       {
-        "Name": "user",
-        "Type": "SkyShop1.Entities.User",
+        "Name": "userDto",
+        "Type": "SkyShop1.DTO.UpdateUserDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "SkyShop1.DTO.UpdateUserDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "SkyShop1.Controllers.UsersController",
@@ -498,6 +508,27 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SkyShop1.Controllers.UsersController",
+    "Method": "ChangePassword",
+    "RelativePath": "api/Users/password/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "passwordDto",
+        "Type": "SkyShop1.DTO.ChangePasswordDTO",
         "IsRequired": true
       }
     ],
