@@ -22,7 +22,7 @@ namespace SkyShop1.Controllers
             _context = context;
         }
 
-        // GET: api/CheckoutLogs
+        // GET: api/checkoutLogs?checkoutId=11
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CheckoutLogDTO>>> GetLogsForCheckout([FromQuery] int checkoutId)
         {
@@ -45,20 +45,6 @@ namespace SkyShop1.Controllers
                 .ToListAsync();
 
             return Ok(logs);
-        }
-
-        // GET: api/CheckoutLogs/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CheckoutLog>> GetCheckoutLog(int id)
-        {
-            var checkoutLog = await _context.CheckoutLogs.FindAsync(id);
-
-            if (checkoutLog == null)
-            {
-                return NotFound();
-            }
-
-            return checkoutLog;
         }
 
         // PUT: api/CheckoutLogs/5
