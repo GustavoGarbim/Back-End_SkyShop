@@ -8,6 +8,8 @@ namespace SkyShop1.Entities
         [Key]
         public int Id { get; set; } // PK
 
+        public string ImageUrl { get; set; }
+
         [Required]
         public int CartId { get; set; }
 

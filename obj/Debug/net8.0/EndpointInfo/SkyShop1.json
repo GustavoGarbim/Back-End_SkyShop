@@ -358,44 +358,6 @@
       }
     },
     "/api/CheckoutLogs/{id}": {
-      "get": {
-        "tags": [
-          "CheckoutLogs"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CheckoutLog"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CheckoutLog"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CheckoutLog"
-                }
-              }
-            }
-          }
-        }
-      },
       "put": {
         "tags": [
           "CheckoutLogs"
@@ -946,6 +908,10 @@
             "minimum": 1,
             "type": "integer",
             "format": "int32"
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1016,6 +982,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "cartId": {
             "type": "integer",
             "format": "int32"
@@ -1045,6 +1015,10 @@
       "CartItemDTO": {
         "type": "object",
         "properties": {
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "productId": {
             "type": "integer",
             "format": "int32"

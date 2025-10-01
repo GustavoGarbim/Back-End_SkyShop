@@ -16,7 +16,7 @@ namespace SkyShop1.Entities
         [Required]
         public string Password { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.ToLocalTime();
 
         [Required]
         public string Address { get; set; }

@@ -12,8 +12,8 @@ using SkyShop1.Data;
 namespace SkyShop1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250918171531_inicial3")]
-    partial class inicial3
+    [Migration("20251001145847_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,9 @@ namespace SkyShop1.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
@@ -146,6 +149,9 @@ namespace SkyShop1.Migrations
                     b.Property<int>("CheckoutId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LogTimeStamp")
                         .HasColumnType("datetime2");
 
@@ -171,6 +177,10 @@ namespace SkyShop1.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

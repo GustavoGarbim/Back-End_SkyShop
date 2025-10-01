@@ -6,17 +6,33 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SkyShop1.Migrations
 {
     /// <inheritdoc />
-    public partial class inicial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "CheckoutLogDTO",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CheckoutId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LogTimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckoutLogDTO", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -71,6 +87,7 @@ namespace SkyShop1.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CartId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<int>(type: "int", nullable: false),
@@ -123,6 +140,29 @@ namespace SkyShop1.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CheckoutLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    LogTimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CheckoutId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckoutLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CheckoutLogs_Checkouts_CheckoutId",
+                        column: x => x.CheckoutId,
+                        principalTable: "Checkouts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_CartId",
                 table: "CartItems",
@@ -137,6 +177,11 @@ namespace SkyShop1.Migrations
                 name: "IX_Carts_UserId",
                 table: "Carts",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CheckoutLogs_CheckoutId",
+                table: "CheckoutLogs",
+                column: "CheckoutId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Checkouts_CartId",
@@ -156,10 +201,16 @@ namespace SkyShop1.Migrations
                 name: "CartItems");
 
             migrationBuilder.DropTable(
-                name: "Checkouts");
+                name: "CheckoutLogDTO");
+
+            migrationBuilder.DropTable(
+                name: "CheckoutLogs");
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Checkouts");
 
             migrationBuilder.DropTable(
                 name: "Carts");

@@ -10,10 +10,13 @@ namespace SkyShop1.DTO
         [Required]
         [Range(1, 100, ErrorMessage = "A quantidade deve ser de no mínimo 1.")]
         public int Quantity { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 
     public class CartItemDTO
     {
+        public string ImageUrl { get; set; }
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public float Price { get; set; }

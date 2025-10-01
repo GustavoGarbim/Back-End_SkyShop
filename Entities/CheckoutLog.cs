@@ -15,7 +15,7 @@ namespace SkyShop1.Entities
         public int CartId { get; set; }
 
         [Required]
-        public DateTime LogTimeStamp { get; set; } = DateTime.UtcNow;
+        public DateTime LogTimeStamp { get; set; } = DateTime.UtcNow.ToLocalTime();
 
         [Required]
         public int CheckoutId { get; set; }

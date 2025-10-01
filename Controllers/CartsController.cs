@@ -49,6 +49,7 @@ namespace SkyShop1.Controllers
             {
                 var newItem = new CartItem
                 {
+                    ImageUrl = itemDTO.ImageUrl,
                     ProductId = itemDTO.ProductId,
                     Quantity = itemDTO.Quantity
                 };
@@ -86,6 +87,7 @@ namespace SkyShop1.Controllers
                 Id = cart.Id,
                 Items = cart.Items.Select(i => new CartItemDTO
                 {
+                    ImageUrl = i.ImageUrl,
                     ProductId = i.ProductId,
                     ProductName = i.Product?.Name ?? "Produto removido",
                     Price = i.Product?.Price ?? 0,
@@ -114,6 +116,7 @@ namespace SkyShop1.Controllers
                 Id = cart.Id,
                 Items = cart.Items.Select(item => new CartItemDTO
                 {
+                    ImageUrl = item.ImageUrl,
                     ProductId = item.ProductId,
                     ProductName = item.Product?.Name ?? "Produto Indisponível",
                     Price = item.Product.Price,
